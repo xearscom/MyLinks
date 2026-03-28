@@ -9,69 +9,182 @@
     <title>.xearsweb.кяру</title>
     <link rel="icon" href="icon.png" type="image/png"> 
     <style>
-            body, html {
-                font-family: "Pixelify Sans", sans-serif;
-                height: 100%;
-                margin: 0;
-                padding: 0;
-                color: #a1a1a1;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
+        body, html {
+            background-color: black;
+            font-family: "Pixelify Sans", sans-serif;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            color: #a1a1a1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        #video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            object-fit: cover;
+        }
+        
+        .head {
+            margin-left: 15px;
+            margin-top: 15px;
+            font-size: 22px;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .main {
+            margin-left: 15px;
+            margin-bottom: 15px;
+            vertical-align: bottom;
+            font-size: 18px;
+            z-index: 2;
+            position: relative;
+        }
+        
+        p {
+            text-align: left;
+            font-size: 16px;
+        }
+        
+        a {
+            color: #a1a1a1;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Стили для экрана загрузки */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index: 9999;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+        }
+
+        /* Стили для анимированного текста */
+        .loading-text {
+            color: rgb(198, 198, 198);
+            font-size: 18px;
+            font-family: "Pixelify Sans", monospace;
+            margin: 15px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        /* Анимация появления текста */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
             }
-            #video-background {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                z-index: -1;
-                object-fit: cover;
+            to {
+                opacity: 1;
             }
-            .head {
-                margin-left: 15px;
-                margin-top: 15px;
-                font-size: 22px;
-            
-            }
-            .main {
-                margin-left: 15px;
-                margin-bottom: 15px;
-                vertical-align: bottom;
-                font-size: 18px;
-                
-            }
-            p {
-                text-align: left;
-                font-size: 16px; /* Размер шрифта для параграфов */
-            }
-            a {
-                color: #a1a1a1; /* Цвет ссылки */
-                text-decoration: none;
-                /*display: block; /* Делает ссылки блочными для новой строки */
-            }
-            a:hover {
-                text-decoration: underline;
-            }
-        </style>
+        }
+
+        /* Стили для основного контента */
+        .content {
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .content.visible {
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
-    <video id="video-background" autoplay loop muted>
-        <source src="backgroundvideo.mp4" type="video/mp4">
-        Ваш браузер не поддерживает видео.
-    </video>
-    
-    <div class="head">
-        <a href="https://xearscom.github.io">.†††</a>
+    <!-- Экран загрузки -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-text" id="loadingText">.</div>
     </div>
 
-    <div class="main">
-        <a href="https://t.me/ProdByKyaru">Telegram</a><br>
-        <a href="https://soundcloud.com/kyaru_cute">SoundCloud</a><br>
-        <a href="https://t.me/prodkyaru">beats</a><br>
-        <a href="https://t.me/+9LERdlXRkCgxYjJi">Shitpost</a><br>
-        <a></a><br>
-        <a href="https://xearscom.github.io/Kyaru/awards.html">Awards</a><br>
+    <!-- Основной контент -->
+    <div class="content" id="mainContent">
+        <video id="video-background" autoplay loop muted>
+            <source src="backgroundvideo.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+        </video>
+        
+        <div class="head">
+            <a href="https://xearscom.github.io">.†††</a>
+        </div>
+
+        <div class="main">
+            <a href="https://t.me/ProdByKyaru">Telegram</a><br>
+            <a href="https://soundcloud.com/kyaru_cute">SoundCloud</a><br>
+            <a href="https://t.me/prodkyaru">beats</a><br>
+            <a href="https://t.me/+9LERdlXRkCgxYjJi">Shitpost</a><br>
+            <a></a><br>
+            <a href="https://xearscom.github.io/Kyaru/awards.html">Awards</a><br>
+        </div>
     </div>
+
+    <script>
+        // Скрипт для экрана загрузки
+        (function() {
+            const loadingText = document.getElementById('loadingText');
+            const loadingScreen = document.getElementById('loadingScreen');
+            const mainContent = document.getElementById('mainContent');
+            
+            let dotCount = 1;
+            // Измените текст здесь если нужно:
+            const baseText = ""; // Оставьте пустым для точек, или напишите "Загрузка"
+            // Измените скорость здесь (в миллисекундах):
+            const animationSpeed = 500;
+            
+            const animationInterval = setInterval(() => {
+                dotCount = (dotCount % 3) + 1;
+                if (baseText) {
+                    loadingText.textContent = baseText + '.'.repeat(dotCount);
+                } else {
+                    loadingText.textContent = '.'.repeat(dotCount);
+                }
+            }, animationSpeed);
+            
+            function hideLoadingScreen() {
+                clearInterval(animationInterval);
+                
+                setTimeout(() => {
+                    mainContent.classList.add('visible');
+                    loadingScreen.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                    }, 500);
+                }, 300);
+            }
+            
+            // Проверяем загрузку всех ресурсов
+            if (document.readyState === 'complete') {
+                hideLoadingScreen();
+            } else {
+                window.addEventListener('load', hideLoadingScreen);
+            }
+        })();
+    </script>
 </body>
 </html>
